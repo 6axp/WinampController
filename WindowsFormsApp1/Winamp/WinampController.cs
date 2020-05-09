@@ -43,6 +43,34 @@ namespace baxp.Winamp
             return System.Text.Encoding.Unicode.GetString(title);
         }
 
+        public void VolumeUp()
+        {
+            PushButton(Buttons.VolumeUp);
+        }
+
+        public void VolumeDown()
+        {
+            PushButton(Buttons.VolumeDown);
+        }
+
+        public void SetVolume(byte value)
+        {
+            SendCommand(IpcCommands.SetVolume, (int)value);
+        }
+
+        public byte GetVolume()
+        {
+            /* (requires Winamp 2.0+)
+            ** SendMessage(hwnd_winamp,WM_WA_IPC,volume,IPC_SETVOLUME);
+            ** IPC_SETVOLUME sets the volume of Winamp (between the range of 0 to 255).
+            **
+            ** If you pass 'volume' as -666 then the message will return the current volume.
+            ** int curvol = SendMessage(hwnd_winamp,WM_WA_IPC,-666,IPC_SETVOLUME);
+            */
+
+            return (byte)SendCommand(IpcCommands.SetVolume, -666);
+        }
+
         public void NextTrack()
         {
             this.PushButton(Buttons.NextTrack);
@@ -75,7 +103,12 @@ namespace baxp.Winamp
 
         private IntPtr SendCommand(IpcCommands command)
         {
-            return NativeMethods.SendMessage(this.process.MainWindowHandle, WM_WA_IPC, 0, (int)command);
+            return SendCommand(command, 0);
+        }
+
+        private IntPtr SendCommand(IpcCommands command, int value)
+        {
+            return NativeMethods.SendMessage(this.process.MainWindowHandle, WM_WA_IPC, value, (int)command);
         }
     }
 }

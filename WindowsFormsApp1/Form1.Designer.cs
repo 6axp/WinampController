@@ -38,6 +38,9 @@
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -124,11 +127,30 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(178, 346);
+            this.progressBar1.Maximum = 255;
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(100, 23);
+            this.progressBar1.TabIndex = 8;
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(360, 364);
+            this.trackBar1.Maximum = 255;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(330, 45);
+            this.trackBar1.TabIndex = 9;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -143,6 +165,7 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -159,6 +182,8 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }
 

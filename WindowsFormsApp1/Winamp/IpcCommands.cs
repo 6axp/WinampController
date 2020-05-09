@@ -9,11 +9,17 @@ namespace baxp.Winamp
         Button4 = 40047,
         Button5 = 40048,
 
+        VolumeUp = 40058,
+        VolumeDown = 40059,
+        FastForward_5Sec = 40060,
+        Rewind_5sec = 40061,
+
         PrevTrack = Button1,
         Play = Button2,
         Pause = Button3,
         Stop = Button4,
-        NextTrack = Button5,
+        NextTrack = Button5
+
     }
 
     internal enum IpcCommands

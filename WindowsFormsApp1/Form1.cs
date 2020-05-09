@@ -72,6 +72,7 @@ namespace WindowsFormsApp1
 
         private void button4_Click(object sender, EventArgs e)
         {
+            this.winamp.VolumeUp();
             //device.Volume++;
             //this.textBox1.Text = device.Volume.ToString();
             //this.simulator.Keyboard.KeyPress(VirtualKeyCode.VOLUME_UP);
@@ -79,6 +80,7 @@ namespace WindowsFormsApp1
 
         private void button5_Click(object sender, EventArgs e)
         {
+            this.winamp.VolumeDown();
             //device.Volume--;
             //this.textBox1.Text = device.Volume.ToString();
             //this.simulator.Keyboard.KeyPress(VirtualKeyCode.VOLUME_DOWN);
@@ -106,6 +108,20 @@ namespace WindowsFormsApp1
         private void timer1_Tick(object sender, EventArgs e)
         {
             this.textBox1.Text = this.winamp.GetCurrentTrack();
+
+            var volume = this.winamp.GetVolume();
+            this.progressBar1.Value = volume;
+
+            if (volume != this.trackBar1.Value)
+            {
+                this.trackBar1.Value = volume;
+            }
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            var bar = (TrackBar)sender;
+            this.winamp.SetVolume((byte)bar.Value);
         }
     }
 }
