@@ -18,21 +18,22 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        InputSimulator simulator = new InputSimulator();
-        CoreAudioController controller;
-        CoreAudioDevice device;
+        private WinampController winamp;
 
         public Form1()
         {
             InitializeComponent();
-            //this.controller = new CoreAudioController();
-            //int a = 5;
-            //this.device = controller.DefaultPlaybackDevice;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.winamp = WinampController.GetExisting();
+            if (this.winamp == null)
+            {
+                this.winamp = WinampController.StartNew();
+            }
 
+            timer1.Start();
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -56,17 +57,17 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            WinampController.NextTrack();
+            this.winamp.NextTrack();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            WinampController.PreviousTrack();
+            this.winamp.PreviousTrack();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            WinampController.Pause();
+            this.winamp.Pause();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -85,7 +86,7 @@ namespace WindowsFormsApp1
 
         private void button6_Click(object sender, EventArgs e)
         {
-            this.simulator.Keyboard.KeyPress(VirtualKeyCode.VOLUME_MUTE);
+            // miute
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -99,8 +100,12 @@ namespace WindowsFormsApp1
             // IPC_GETMODULENAME 109
             // IPC_PLAYING_FILE 3003 
 
-            this.textBox1.Text = baxp.Winamp.WinampController.GetCurrentTrack();
+            this.textBox1.Text = this.winamp.GetCurrentTrack();
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.textBox1.Text = this.winamp.GetCurrentTrack();
+        }
     }
 }

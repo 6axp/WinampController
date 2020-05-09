@@ -5,84 +5,77 @@ namespace baxp.Winamp
     using System.Diagnostics;
     using System.Linq;
 
-    public class WinampController
+    public sealed class WinampController
     {
         private static readonly string ProcessName = "winamp";
         private static readonly int WM_USER = 1024;
         private static readonly int WM_WA_IPC = WM_USER;
         private static readonly int WM_COMMAND = 0x0111;
 
-        public static Process GetWinampProcess()
+        private readonly Process process;
+
+        private WinampController(Process process)
         {
-            return Process.GetProcessesByName(ProcessName).FirstOrDefault();
+            this.process = process ?? throw new ArgumentNullException();
         }
 
-        public static string GetCurrentTrack()
+        private static WinampController TryCreateInstance(Process process)
         {
-            var process = GetWinampProcess();
-            if (process != null)
-            {
-                var titleAddr = SendCommand(IpcCommands.GetPlayingTitleUnicode);
-                var title = NativeMethods.ReadProcessMemory(process, titleAddr, 256);
-                return System.Text.Encoding.Unicode.GetString(title);
-            }
-
-            return null;
+            return (process != null) ? new WinampController(process) : null;
         }
 
-        public static bool IsAlive()
+        public static WinampController GetExisting()
         {
-            return GetWinampProcess() != null;
+            var process = Process.GetProcessesByName(ProcessName).FirstOrDefault();
+            return TryCreateInstance(process);
         }
 
-        public static Process StartWinamp()
+        public static WinampController StartNew()
         {
-            return Process.Start(ProcessName);
+            var process = Process.Start(ProcessName);
+            return TryCreateInstance(process);
         }
 
-        public static void NextTrack()
+        public string GetCurrentTrack()
         {
-            PushButton(Buttons.NextTrack);
+            var titleAddr = SendCommand(IpcCommands.GetPlayingTitleUnicode);
+            var title = NativeMethods.ReadProcessMemory(process, titleAddr, 256);
+            return System.Text.Encoding.Unicode.GetString(title);
         }
 
-        public static void PreviousTrack()
+        public void NextTrack()
         {
-            PushButton(Buttons.PrevTrack);
+            this.PushButton(Buttons.NextTrack);
         }
 
-        public static void Play()
+        public void PreviousTrack()
         {
-            PushButton(Buttons.Play);
+            this.PushButton(Buttons.PrevTrack);
         }
 
-        public static void Pause()
+        public void Play()
         {
-            PushButton(Buttons.Pause);
+            this.PushButton(Buttons.Play);
         }
 
-        public static void Stop()
+        public void Pause()
         {
-            PushButton(Buttons.Stop);
+            this.PushButton(Buttons.Pause);
         }
 
-        private static void PushButton(Buttons button)
+        public void Stop()
         {
-            var process = GetWinampProcess();
-            if (process != null)
-            {
-                NativeMethods.SendMessage(process.MainWindowHandle, WM_COMMAND, (int)button, 0);
-            }
+            this.PushButton(Buttons.Stop);
         }
 
-        private static IntPtr SendCommand(IpcCommands command)
+        private void PushButton(Buttons button)
         {
-            var process = GetWinampProcess();
-            if (process != null)
-            {
-                return NativeMethods.SendMessage(process.MainWindowHandle, WM_WA_IPC, 0, (int)command);
-            }
+            NativeMethods.SendMessage(this.process.MainWindowHandle, WM_COMMAND, (int)button, 0);
+        }
 
-            return IntPtr.Zero;
+        private IntPtr SendCommand(IpcCommands command)
+        {
+            return NativeMethods.SendMessage(this.process.MainWindowHandle, WM_WA_IPC, 0, (int)command);
         }
     }
 }
