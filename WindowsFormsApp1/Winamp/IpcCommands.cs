@@ -45,6 +45,7 @@ namespace baxp.Winamp
         GetPlayingTitleUnicode = 3034,
         TogglePlaying = 102,
         NextItem = 636,
+        RestartWinamp = 135,
 
         // IPC_GETNEXTLISTPOS 136
 
@@ -92,7 +93,7 @@ namespace baxp.Winamp
 ** The IPC_STARTPLAY_INT version is used internally and you should not need to use it
 ** since it won't be any fun.
 */
-         
+
 
     }
 }

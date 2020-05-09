@@ -36,6 +36,22 @@ namespace baxp.Winamp
             return TryCreateInstance(process);
         }
 
+        public bool IsAlive
+        {
+            get
+            {
+                return !this.process.HasExited;
+            }
+        }
+
+        /*
+        // Not stable
+        public void Restart()
+        {
+            SendCommand(IpcCommands.RestartWinamp);
+        }
+        */
+
         public string GetCurrentTrack()
         {
             var titleAddr = SendCommand(IpcCommands.GetPlayingTitleUnicode);

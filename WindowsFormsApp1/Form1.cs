@@ -102,26 +102,39 @@ namespace WindowsFormsApp1
             // IPC_GETMODULENAME 109
             // IPC_PLAYING_FILE 3003 
 
-            this.textBox1.Text = this.winamp.GetCurrentTrack();
+            this.winamp.Restart();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            this.textBox1.Text = this.winamp.PlayingStatus.ToString() + ": " +  this.winamp.GetCurrentTrack();
-
-            var volume = this.winamp.GetVolume();
-            this.progressBar1.Value = volume;
-
-            if (volume != this.trackBar1.Value)
+            if (this.winamp.IsAlive)
             {
-                this.trackBar1.Value = volume;
+                this.textBox1.Text = this.winamp.PlayingStatus.ToString() + ": " + this.winamp.GetCurrentTrack();
+
+                var volume = this.winamp.GetVolume();
+                this.progressBar1.Value = volume;
+
+                if (volume != this.trackBar1.Value)
+                {
+                    this.trackBar1.Value = volume;
+                }
             }
+            else
+            {
+                this.textBox1.Text = "winamp is not alive :/";
+            }
+            
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             var bar = (TrackBar)sender;
             this.winamp.SetVolume((byte)bar.Value);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            this.winamp = WinampController.StartNew();
         }
     }
 }
