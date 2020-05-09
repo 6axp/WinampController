@@ -88,7 +88,7 @@ namespace WindowsFormsApp1
 
         private void button6_Click(object sender, EventArgs e)
         {
-            // miute
+            // mute
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -107,7 +107,7 @@ namespace WindowsFormsApp1
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            this.textBox1.Text = this.winamp.GetCurrentTrack();
+            this.textBox1.Text = this.winamp.PlayingStatus.ToString() + ": " +  this.winamp.GetCurrentTrack();
 
             var volume = this.winamp.GetVolume();
             this.progressBar1.Value = volume;

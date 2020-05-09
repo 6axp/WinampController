@@ -40,7 +40,15 @@ namespace baxp.Winamp
         {
             var titleAddr = SendCommand(IpcCommands.GetPlayingTitleUnicode);
             var title = NativeMethods.ReadProcessMemory(process, titleAddr, 256);
-            return System.Text.Encoding.Unicode.GetString(title);
+            return System.Text.Encoding.Unicode.GetString(title).Trim();
+        }
+
+        public PlayingStatus PlayingStatus
+        {
+            get
+            {
+                return (PlayingStatus)SendCommand(IpcCommands.IsPlaying);
+            }
         }
 
         public void VolumeUp()

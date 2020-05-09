@@ -1,6 +1,14 @@
 ﻿
 namespace baxp.Winamp
 {
+    public enum PlayingStatus
+    {
+        // Unknown = -1,
+        Playing = 1,
+        Paused = 3,
+        Stopped = 0,
+    }
+
     internal enum Buttons
     {
         Button1 = 40044,

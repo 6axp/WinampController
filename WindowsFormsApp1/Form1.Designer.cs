@@ -46,10 +46,10 @@
             // textBox1
             // 
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(141, 111);
+            this.textBox1.Location = new System.Drawing.Point(52, 90);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(280, 165);
+            this.textBox1.Size = new System.Drawing.Size(345, 165);
             this.textBox1.TabIndex = 0;
             // 
             // button1

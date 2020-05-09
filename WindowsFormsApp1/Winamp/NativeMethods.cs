@@ -16,7 +16,7 @@ namespace baxp.Winamp
             if (handle != null)
             {
                 var bytes = new byte[size];
-                if (ReadProcessMemory(handle, address, bytes, size, out int outLen))
+                if (ReadProcessMemory(handle, address, bytes, size, out _))
                 {
                     result = bytes;
                 }
