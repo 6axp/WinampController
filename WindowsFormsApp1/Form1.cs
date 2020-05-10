@@ -57,12 +57,12 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.winamp.NextTrack();
+            this.winamp.PlayNextTrack();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.winamp.PreviousTrack();
+            this.winamp.PlayPreviousTrack();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -102,7 +102,7 @@ namespace WindowsFormsApp1
             // IPC_GETMODULENAME 109
             // IPC_PLAYING_FILE 3003 
 
-            this.winamp.Restart();
+            // this.winamp.Restart();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -118,6 +118,11 @@ namespace WindowsFormsApp1
                 {
                     this.trackBar1.Value = volume;
                 }
+
+                var pos1 = winamp.GetCurrentTrack();
+                var pos2 = winamp.NextTrack;
+
+                var bp = 0;
             }
             else
             {
@@ -134,7 +139,16 @@ namespace WindowsFormsApp1
 
         private void button8_Click(object sender, EventArgs e)
         {
-            this.winamp = WinampController.StartNew();
+            var win = WinampController.StartNew();
+            this.winamp = win;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            // var pos = winamp.GetCurrentTrackPosition();
+            // winamp.SetCurrentTrackPosition(pos + 1);
+
+            
         }
     }
 }

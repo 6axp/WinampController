@@ -36,6 +36,8 @@ namespace baxp.Winamp
         SetVolume = 122,
         GetListLength = 124,
         GetListPosition = 125,
+        GetNextListPosition = 136,
+        SetListPosition = 121,
         IsFullStop = 400,
         IsShuffled = 250,
         ToggleShuffle = 252,

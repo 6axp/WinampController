@@ -14,6 +14,8 @@ namespace baxp.Winamp
 
         private readonly Process process;
 
+        public static int UnknownPosition = -1;
+
         private WinampController(Process process)
         {
             this.process = process ?? throw new ArgumentNullException();
@@ -21,7 +23,7 @@ namespace baxp.Winamp
 
         private static WinampController TryCreateInstance(Process process)
         {
-            return (process != null) ? new WinampController(process) : null;
+            return (process != null && !process.HasExited) ? new WinampController(process) : null;
         }
 
         public static WinampController GetExisting()
@@ -44,6 +46,60 @@ namespace baxp.Winamp
             }
         }
 
+        public byte Volume
+        {
+            get
+            {
+                return this.GetVolume();
+            }
+            set
+            {
+                this.SetVolume(value);
+            }
+        }
+
+        public int CurrentTrackPosition
+        {
+            get
+            {
+                return this.GetCurrentTrackPosition();
+            }
+            set
+            {
+                this.Play(value);
+            }
+        }
+
+        public int NextTrackPosition
+        {
+            get
+            {
+                return this.GetNextTrackPosition();
+            }
+            /*
+            set
+            {
+                this.SetNextTrackPosition(value);
+            }
+            */
+        }
+
+        public string CurrentTrack
+        {
+            get
+            {
+                return this.GetCurrentTrack();
+            }
+        }
+
+        public string NextTrack
+        {
+            get
+            {
+                return this.GetTrackTitle(this.GetNextTrackPosition());
+            }
+        }
+
         /*
         // Not stable
         public void Restart()
@@ -55,6 +111,16 @@ namespace baxp.Winamp
         public string GetCurrentTrack()
         {
             var titleAddr = SendCommand(IpcCommands.GetPlayingTitleUnicode);
+            var title = NativeMethods.ReadProcessMemory(process, titleAddr, 256);
+            return System.Text.Encoding.Unicode.GetString(title).Trim();
+
+            // or
+            // return GetTrackTitle(GetCurrentTrack());
+        }
+
+        public string GetTrackTitle(int position)
+        {
+            var titleAddr = SendCommand(IpcCommands.GetPlaylistTitleUnicode, position);
             var title = NativeMethods.ReadProcessMemory(process, titleAddr, 256);
             return System.Text.Encoding.Unicode.GetString(title).Trim();
         }
@@ -95,12 +161,35 @@ namespace baxp.Winamp
             return (byte)SendCommand(IpcCommands.SetVolume, -666);
         }
 
-        public void NextTrack()
+        public int GetCurrentTrackPosition()
+        {
+            return (int)SendCommand(IpcCommands.GetListPosition);
+        }
+
+        public void SetCurrentTrackPosition(int position)
+        {
+            SendCommand(IpcCommands.SetListPosition, position);
+        }
+
+        public int GetNextTrackPosition()
+        {
+            return (int)SendCommand(IpcCommands.GetNextListPosition);
+        }
+
+        /*
+        // not working
+        public void SetNextTrackPosition(int position)
+        {
+             SendCommand(IpcCommands.GetNextListPosition, position);
+        }
+        */
+
+        public void PlayNextTrack()
         {
             this.PushButton(Buttons.NextTrack);
         }
 
-        public void PreviousTrack()
+        public void PlayPreviousTrack()
         {
             this.PushButton(Buttons.PrevTrack);
         }
@@ -108,6 +197,12 @@ namespace baxp.Winamp
         public void Play()
         {
             this.PushButton(Buttons.Play);
+        }
+
+        public void Play(int postion)
+        {
+            this.SetCurrentTrackPosition(postion);
+            this.Play();
         }
 
         public void Pause()
